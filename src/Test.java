@@ -7,6 +7,7 @@ public class Test {
 
         e2.printDetails();
         e3.printDetails();
+         System.out.println("GitHub pull deneme!!!");
 
     }
 }
