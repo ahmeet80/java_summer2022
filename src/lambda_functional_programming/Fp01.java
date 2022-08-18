@@ -1,7 +1,9 @@
 package lambda_functional_programming;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Fp01 {
     /*
@@ -28,7 +30,7 @@ public class Fp01 {
 
         listElemanlariniYazdirStructured(liste);
         System.out.println();
-        listElemanlariniYazdirStructured(liste);
+        listElemanlariniYazdirFunctional(liste);
         System.out.println();
         ciftElemanlariYazdirStructured(liste);
         System.out.println("Functional :");
@@ -36,9 +38,25 @@ public class Fp01 {
         System.out.println();
         tekeElemanlarinKareleriniYazdirFunctional(liste);
         System.out.println();
-        terarsirTekElemanlarinKupunuYazdir(liste);
+        tekarsizTekElemanlarinKupunuYazdir(liste);
         System.out.println();
         tekrarsizCiftElemanlarinKareToplami(liste);
+        System.out.println();
+        tekrarsizCiftElemanlarinKupununCarpimi(liste);
+        System.out.println();
+        getMaxEleman(liste);
+        System.out.println();
+        getMaxEleman02(liste);
+        System.out.println();
+        getYedidenBuyukCiftMin(liste);
+        System.out.println();
+        getYedidenBuyukCiftMin2(liste);
+        System.out.println();
+        getYedidenBuyukCiftMin3(liste);
+        System.out.println();
+        getTersSiralamaylaTekrarsizElemanlarinYarisi(liste);
+
+
 
 
 
@@ -59,8 +77,8 @@ public class Fp01 {
 
     public static void listElemanlariniYazdirFunctional(List<Integer> list){
 
-        list.stream().forEach(t-> System.out.print(t+" ")); // t-> lambda exprission
-        // stream() metodu collection'dan elementleri akisas dahil etmek icin kullanilir
+        list.stream().forEach(t-> System.out.print(t+" ")); // t-> lambda expression
+        // stream() metodu collection'dan elementleri akisa dahil etmek icin kullanilir
     }
 
     //2)Cift sayi olan list elemanlarini  aynı satırda aralarında boşluk bırakarak yazdıran bir method oluşturun.(Structured)
@@ -89,8 +107,8 @@ public class Fp01 {
     }
 
     //4) Ardışık tek list elementlerinin küplerini tekrarsız olarak aynı satırda aralarında boşluk bırakarak yazdıran bir method oluşturun.(Functional)
-    public static void terarsirTekElemanlarinKupunuYazdir(List<Integer> list){
-        list.stream().distinct().filter(t->t%2!=0).map(t->t*t*t).forEach(t-> System.out.print(t+" "));// distinct() tekrarlanan elemanlari alma
+    public static void tekarsizTekElemanlarinKupunuYazdir(List<Integer> list){
+        list.stream().distinct().filter(t->t%2!=0).map(t->t*t*t).forEach(t-> System.out.print(t+" "));// distinct() tekrarlanan elemanlarin sadece birini alma
     }
 
     //5) Tekrarsız çift elementlerin karelerinin toplamını hesaplayan bir method oluşturun.
@@ -98,8 +116,84 @@ public class Fp01 {
     public static void tekrarsizCiftElemanlarinKareToplami(List<Integer> list){
         Integer toplam = list.stream().distinct().filter(t->t%2==0).map(t->t*t).reduce(0,(t,u)->t+u); // reduce(0,(t,u)->t+u) baslangic degerini
                                                                                                       // 0'dan baslatip t+=u tarzi bir indirgeme islemi yapma
-        System.out.println(toplam);
+        System.out.println(toplam); // stream() kullanilmadan sonrasindaki metodlar kullanilamaz
 
     }
 
+    //6) Tekrarsız çift elemanların küpünün çarpımını hesaplayan bir method oluşturun.
+    public static void tekrarsizCiftElemanlarinKupununCarpimi(List<Integer> list){
+
+        Integer carpim = list.
+                stream().
+                distinct().
+                filter(t->t%2==0).
+                map(t->t*t*t).reduce(1,(t,u)-> t*u);
+        System.out.println(carpim);
+    }
+    //7) List elemanları arasından en büyük değeri bulan bir method oluşturunuz
+    public static void getMaxEleman(List<Integer> list){
+        Integer max = list.
+                stream().
+                distinct().
+                reduce(Integer.MIN_VALUE,(t,u)-> t>u ? t : u);
+
+
+        System.out.println(max);
+    }
+    // 2.yol
+    public static void getMaxEleman02(List<Integer> list){
+        Integer max = list.
+                stream().
+                distinct().
+                sorted().
+                reduce(Integer.MIN_VALUE, (t,u)-> u); // sorted() siralama yapiyor
+        System.out.println("max = " + max);
+
+    }
+    //Ödev
+    //8)List elemanları arasından en küçük değeri bulan bir method oluşturun.(2 Yol ile)
+
+    //9) List elemanları arasından 7'den büyük, çift, en küçük değeri bulan bir method oluşturun.
+    //1. Yol:
+    public static void getYedidenBuyukCiftMin(List<Integer> list){
+        Integer min = list.
+                stream().
+                distinct().
+                filter(t->t%2==0).
+                filter(t->t>7).
+                reduce(Integer.MAX_VALUE,(t,u)-> t<u ? t : u); // distinct() tekrarlanan elemanlarin sadece birini alma (tekil elemanlari al)
+
+        System.out.println(min);
+    }
+    //2.Yol
+    public static void getYedidenBuyukCiftMin2(List<Integer> list){
+        int min=list.
+                stream().
+                distinct().
+                filter(t->t%2==0).
+                filter(t->t>7).
+                sorted(Comparator.reverseOrder()).
+                reduce(Integer.MAX_VALUE,(t,u)->u);
+
+        System.out.println(min);
+    }
+    //3.Yol
+    public static void getYedidenBuyukCiftMin3(List<Integer> list){
+       Integer min = list.
+               stream().
+               filter(t->t%2==0).
+               filter(t->t>7).
+               sorted().
+               findFirst().get();
+
+       System.out.println(min);
+    }
+    //10) Ters sıralama ile tekrarsız ve 5'ten büyük elemanların yarı değerlerini(elamanın ikiye bölüm sonucunu) bulan bir method oluşturun.
+    public static void getTersSiralamaylaTekrarsizElemanlarinYarisi(List<Integer> list){
+
+        List<Double> sonuc = list.stream().distinct().filter(t->t>5).
+                             map(t->t/2.0).sorted(Comparator.reverseOrder()).collect(Collectors.toList()); // int double bir sayiya bolunurse
+                                                                                                           // sonuc double olur
+        System.out.println(sonuc);
+    }
 }

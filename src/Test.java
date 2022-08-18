@@ -10,5 +10,7 @@ public class Test {
          System.out.println("GitHub pull deneme!!!");
          System.out.println("GitHub push deneme!!!");
 
+
+
     }
 }
