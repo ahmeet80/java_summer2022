@@ -55,6 +55,10 @@ public class Fp01 {
         getYedidenBuyukCiftMin3(liste);
         System.out.println();
         getTersSiralamaylaTekrarsizElemanlarinYarisi(liste);
+        System.out.println();
+        getMinEleman1Yol(liste);
+        System.out.println();
+        getMinEleman2Yol(liste);
 
 
 
@@ -152,6 +156,17 @@ public class Fp01 {
     }
     //Ödev
     //8)List elemanları arasından en küçük değeri bulan bir method oluşturun.(2 Yol ile)
+    // 8 ) 1. Yol
+    public static void getMinEleman1Yol(List<Integer> list){
+        Integer min = list.stream().distinct().reduce(Integer.MAX_VALUE,(t,u)-> t>u ? u : t);
+        System.out.println("8) 1. Yol min = " + min);
+    }
+    // 8 ) 2. Yol
+    public static void getMinEleman2Yol(List<Integer> list){
+        Integer min = list.stream().distinct().sorted(Comparator.reverseOrder()).reduce(Integer.MAX_VALUE,(t,u)-> u);
+
+        System.out.println("8) 2. Yol min = " + min);
+    }
 
     //9) List elemanları arasından 7'den büyük, çift, en küçük değeri bulan bir method oluşturun.
     //1. Yol:
